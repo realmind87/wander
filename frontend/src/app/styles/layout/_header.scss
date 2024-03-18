@@ -1,0 +1,23 @@
+
+
+.header {
+    display: flex;
+    gap: 0 20px;
+    align-items: center;
+    height: 64px;
+    padding: 0 24px;
+    border-bottom: 1px solid #d7d7d7;
+
+    h1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        font-size: $font-size-base;
+        border-radius: 100%;
+        color: #fff;
+        font-weight: $font-bold;
+        background-color: #FF6154;
+    }
+}
