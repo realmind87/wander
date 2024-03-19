@@ -33,11 +33,18 @@ export default function SignUp({onUpload} : ImageUploadProps) {
                 body: formData,
                 credentials: 'include'
             })
+
+            if (response.status === 403) {
+                return {
+                    message: 'user exists'
+                }
+            }
+
             shouldRedirect = true;
         } catch(e) {
             console.error(e)
         }
-        
+
         if (shouldRedirect) {
             redirect('/')
         }
