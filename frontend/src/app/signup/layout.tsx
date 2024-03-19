@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./styles/main.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Wander",
-  description: "Wander 커뮤니티",
+  title: "Wander | 회원가입",
+  description: "회원가입 페이지",
 };
 
 export default function RootLayout({

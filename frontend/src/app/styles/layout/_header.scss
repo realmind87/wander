@@ -8,7 +8,16 @@
     padding: 0 24px;
     border-bottom: 1px solid #d7d7d7;
 
-    h1 {
+    &__inner {
+        display: flex;
+        gap: 0 20px;
+        align-items: center;
+        height: 64px;
+        width: 1024px;
+        margin: 0 auto;
+    }
+    
+    .logo {
         display: flex;
         justify-content: center;
         align-items: center;
