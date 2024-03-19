@@ -13,7 +13,7 @@ const LoginButton = () => {
 
     return (
         <div className="tnb-buttons last">
-            <button type="button" className="btn-login" onClick={onLogin}>Login</button>
+            <button type="button" className="btn-login" onClick={onLogin}>로그인</button>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <div className='login-wrap'>
                     <h1>로그인</h1>
