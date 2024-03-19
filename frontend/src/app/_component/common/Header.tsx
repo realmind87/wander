@@ -8,8 +8,8 @@ const Header = () => {
         <header className="header">
             <div className='header__inner'>
                 <h1 className='logo'>W</h1>
-                <UserInfo />
-                {/* <LoginButton /> */}
+                {/* <UserInfo /> */}
+                <LoginButton />
             </div>
         </header>
     )
