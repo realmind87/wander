@@ -37,34 +37,50 @@ router.post('/login', async (req, res) => {
 
 // 회원가입
 router.post('/register' , async (req, res) => {
-    const { username, password } = req.body;
+    const { userID, password, passwordCheck } = req.body;
+
+    console.log(req.body)
 
     // 유저네임 유효성 검사를 위한 정규 표현식: 영문자로 시작하고 최소 8자 이상
     const usernameRegex = /^[A-Za-z][A-Za-z0-9]{7,}$/;
 
     // 비밀번호 유효성 검사를 위한 정규 표현식
     // 최소 8자, 최소 하나의 대문자와 특수문자 포함
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^])[A-Za-z\d@$!%*?&^]{8,}$/;
+
 
     // 입력 검증 (실제로는 더 강화된 검증 필요)
-    if (!username || !password) {
-        return res.status(400).send('Username and password are required');
+    if (!userID) {
+        return res.json({code: 400, error: "userID", message: '아이디를 입력해주세요'});
     }
 
     // 유저네임 유효성 검사
-    if (!usernameRegex.test(username)) {
-        return res.status(400).send('Username must start with a letter and be at least 8 characters long.');
+    if (!usernameRegex.test(userID)) {
+        return res.send({code: 400, error: 'userID_validation', message: '아이디 양식에 맞지 않습니다.'});
+    }
+
+    if (!password) {
+        return res.json({code: 400, error: "password", message: '비밀번호 입력해주세요'});
     }
 
     // 비밀번호 유효성 검사
     if (!passwordRegex.test(password)) {
-        return res.status(400).send('Password must be at least 8 characters long and include at least one uppercase letter, one special character, and one number.');
+        return res.send({code: 400, error: 'password_validation', message: '비밀번호 양식에 맞지 않습니다.'});
+    }
+    
+    if (!passwordCheck) {
+        return res.json({code: 400, error: "passwordCheck", message: '비밀번호 확인을 입력해주세요'});
+    }
+
+    // 비밀번호 확인 유효성 검사
+    if (password !== passwordCheck) {
+        return res.send({code: 400, error: 'passwordCheck_validation', message: '비밀번호를 다시 확인해 주세요'});
     }
 
     // 중복 사용자
-    const existingUser = users.find(user => user.username === username )
+    const existingUser = users.find(user => user.userID === userID )
     if (existingUser) {
-        return res.status(400).send('Username already exists')
+        return res.send({code: 400, error: 'user_exist', message: '가입된 회원이 있습니다.'})
     }
 
 
@@ -74,9 +90,9 @@ router.post('/register' , async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds); // 비밀번호 해싱
 
         // 사용자 저장
-        const newUser = { username, password: hashedPassword };
+        const newUser = { userID, password: hashedPassword };
         users.push(newUser);
-        res.status(201).send(`User ${username} registered successfully`);
+        res.status(201).send(`User ${userID} registered successfully`);
 
     } catch {
         res.status(500).send('Server error.');
