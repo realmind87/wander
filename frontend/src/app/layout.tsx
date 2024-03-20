@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/main.scss";
-import { MSWComponent } from '@/app/_component/msw/MSWComponent'
-import Providers from './providers'
+//import Providers from './providers'
+import axios from "axios";
+
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+axios.defaults.withCredentials = true;
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +18,8 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
-        <MSWComponent />
+        {children}
+        {/* <Providers>{children}</Providers> */}
       </body>
     </html>
   );
