@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "cross-env ANALYZE=true NODE_ENV=developpaper next build",
+    "start": "cross-env ANALYZE=true NODE_ENV=developpaper next start -p 80",
     "lint": "next lint"
   },
   "dependencies": {
@@ -13,6 +13,7 @@
     "@tanstack/react-query-devtools": "^5.28.4",
     "axios": "^1.6.8",
     "cookie": "^0.6.0",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.10",
     "next": "14.1.3",
     "next-auth": "^5.0.0-beta.15",

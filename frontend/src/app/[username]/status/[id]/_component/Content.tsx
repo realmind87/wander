@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import {getSinglePost} from '@/app/_lib/posts'
 import {PostProps} from '@/app/models/post'
 import { BsPersonCircle } from "react-icons/bs"
+import backUrl from "@/config"
 
 type Props = {
     params: { id: string, username: string}
@@ -39,7 +40,7 @@ const Content = ({params}: Props) => {
                                         ? <>
                                             {   
                                                 data?.User.type === 'uploads'
-                                                    ? <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/${data?.User.image}`} width={32} height={32} alt="프로필 이미지" />
+                                                    ? <Image src={`${backUrl}/${data?.User.image}`} width={32} height={32} alt="프로필 이미지" />
                                                     : <Image src={`${data?.User.image}`} width={32} height={32} alt="프로필 이미지" />
                                                 
                                             }

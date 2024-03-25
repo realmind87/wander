@@ -14,6 +14,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import ko from "dayjs/locale/ko";
 import Link from 'next/link';
 
+import backUrl from '@/config'
+
 dayjs.extend(relativeTime);
 dayjs.locale(ko);
 
@@ -67,7 +69,7 @@ const SearchResultPosts: React.FC<Props> = ({searchParams}) => {
                                                             <div className="user-img">
                                                                 {
                                                                     post.User.type === 'uploads' 
-                                                                        ? <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/${post.User.image}`} width={16} height={16} alt='' priority />
+                                                                        ? <Image src={`${backUrl}`} width={16} height={16} alt='' priority />
                                                                         : <Image src={`${post.User.image}`} width={16} height={16} alt='' priority />
                                                                 }
                                                             </div>

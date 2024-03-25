@@ -14,6 +14,8 @@ import ko from "dayjs/locale/ko";
 import Link from 'next/link';
 import { useInView } from 'react-intersection-observer'
 
+import backUrl from '@/config'
+
 dayjs.extend(relativeTime);
 dayjs.locale(ko);
 
@@ -83,7 +85,7 @@ const Post = () => {
                                                                     <div className="user-img">
                                                                         {
                                                                             post.User.type === 'uploads' 
-                                                                                ? <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/${post.User.image}`} width={16} height={16} alt='' priority />
+                                                                                ? <Image src={`${backUrl}/${post.User.image}`} width={16} height={16} alt='' priority />
                                                                                 : <Image src={`${post.User.image}`} width={16} height={16} alt='' priority />
                                                                         }
                                                                         

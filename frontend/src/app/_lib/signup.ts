@@ -3,6 +3,7 @@
 import {redirect} from "next/navigation";
 import axios from "axios";
 import {signIn} from '@/auth'
+import backUrl from '@/config'
 
 const Signup =  async (prevState: any, formData: FormData) => {
     
@@ -44,7 +45,7 @@ const Signup =  async (prevState: any, formData: FormData) => {
     }
     
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/users/register`, formData);
+        const response = await axios.post(`${backUrl}/users/register`, formData);
 
         if (response.data.code === 4007) {
             return { code: 4007, message: '가입된 회원이 있습니다.' }

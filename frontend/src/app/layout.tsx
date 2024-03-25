@@ -4,8 +4,9 @@ import "./styles/main.scss";
 import RQproviders from './_component/query/RQproviders'
 import axios from "axios";
 import AuthSession from "./_component/auth/AuthSession";
+import backUrl from "@/config";
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+axios.defaults.baseURL = backUrl;
 axios.defaults.withCredentials = true;
 
 const inter = Inter({ subsets: ["latin"] });

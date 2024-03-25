@@ -5,6 +5,7 @@ import { signOut, useSession } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
 import {Session} from "@auth/core/types";
+import backUrl from '@/config'
 
 type UserProps = {
     user: Session | null
@@ -40,7 +41,7 @@ const UserInfo = ({ user } : UserProps) => {
             <button type="button" className='btn-user' onClick={() => setIsVisible(!isVisible)}>
                 {session?.user?.image?.length !== 0 
                     ? <Image 
-                        src={`${process.env.NEXT_PUBLIC_BASE_URL}/${session?.user?.image}`} 
+                        src={`${backUrl}/${session?.user?.image}`} 
                         width={32} 
                         height={32} 
                         alt="프로필 이미지" 

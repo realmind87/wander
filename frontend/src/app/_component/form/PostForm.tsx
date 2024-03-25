@@ -9,6 +9,7 @@ import Image from 'next/image'
 import axios from "axios";
 import Modal from "../modal/Modal";
 import { RiEditLine, RiImageAddLine } from "react-icons/ri";
+import backUrl from "@/config";
 
 type SessionProps = {
     session: Session | null,
@@ -89,7 +90,7 @@ const PostForm = ({session}: SessionProps) => {
             _formData.append('tit', title)
             _formData.append('con', content)
             
-            return axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, {
+            return axios.post(`${backUrl}/posts`, {
                 userInfo: userInfo,
                 image: imageFile[0],
                 tit: title,

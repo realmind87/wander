@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
 import cookie from 'cookie'
 import { cookies } from "next/headers";
+import backUrl from "./config";
 
 export const { 
     handlers: { GET, POST },
@@ -16,7 +17,7 @@ export const {
         CredentialsProvider({
             async authorize(credentials) {
                 try {
-                    const authResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/users/login`, {
+                    const authResponse = await fetch(`${backUrl}/users/login`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

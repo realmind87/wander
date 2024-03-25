@@ -1,6 +1,7 @@
 import {QueryFunction} from "@tanstack/query-core";
 import {PostProps} from '@/app/models/post';
 import axios from "axios";
+import backUrl from '@/config'
 
 type AddPost = {
     user: any;
@@ -11,7 +12,7 @@ type AddPost = {
 
 export const getPosts = async ({pageParam}: {pageParam: number}) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${pageParam}`, {
+        const res = await fetch(`${backUrl}/posts/${pageParam}`, {
             next: {
                 tags: ['posts']
             },
@@ -31,7 +32,7 @@ export const getPosts = async ({pageParam}: {pageParam: number}) => {
 
 export const getAsidePosts = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/aside/list`, {
+        const res = await fetch(`${backUrl}/posts/aside/list`, {
             next: {
                 tags: ['aside'],
             },
@@ -57,7 +58,7 @@ export const getSearchPosts: QueryFunction<PostProps[], [_1: string, searchParam
     
     try {
         console.log(urlSearchParams.toString())
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/search/result?${urlSearchParams.toString()}`, {
+        const res = await fetch(`${backUrl}/posts/search/result?${urlSearchParams.toString()}`, {
             next: {
                 tags: ['posts', searchParams.q],
             },
@@ -81,7 +82,7 @@ export const getSinglePost: QueryFunction<PostProps, [_1: string, _2: string]> =
     const [_1, id] = queryKey;
     
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/content/${id}`, {
+        const res = await fetch(`${backUrl}/posts/content/${id}`, {
             next: {
                 tags: ['posts', id],
             },
