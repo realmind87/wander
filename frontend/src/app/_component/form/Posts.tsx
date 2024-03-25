@@ -37,7 +37,7 @@ const Post = () => {
         if (inView) {
             !isFetching && hasNextPage && fetchNextPage();
         }
-    }, [hasNextPage, inView, fetchNextPage])
+    }, [isFetching, hasNextPage, inView, fetchNextPage])
 
     console.log(data)
     

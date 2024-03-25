@@ -93,7 +93,7 @@ const SearchResultPosts: React.FC<Props> = ({searchParams}) => {
                             )
                         }) 
                         : <p className='txt-noSearch'>
-                            <strong className='txt-word'>"{searchParams.q}"</strong>
+                            <strong className='txt-word'>{`"${searchParams.q}"`}</strong>
                             에 관련된 검색결과가 없습니다.
                             <Link href="/" type="button" className='btn-link'>다시 불러오기</Link>
                         </p>

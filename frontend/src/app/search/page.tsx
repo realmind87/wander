@@ -4,11 +4,13 @@ import Main from '../home/page'
 import {auth} from "@/auth";
 import { ReadonlyURLSearchParams } from "next/navigation";
 
-const Page = async ({searchParams} : {searchParams : ReadonlyURLSearchParams}) => {
+type MainProps = {
+searchParams?: { q: string, f?: string, pf?: string };
+}
 
-    const sessionData = await auth();
-    
-    return <Main session={sessionData} searchParams={searchParams}  />
+const Page = async ({searchParams} : MainProps) => {
+
+    return <Main searchParams={searchParams}  />
 }
 
 export default Page

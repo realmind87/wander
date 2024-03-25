@@ -44,11 +44,11 @@ export default function SignUp() {
         }
     };
 
-    const onSubmitHandler = useCallback((e: FormData, isImg : string | null) => {
+    const onSubmitHandler = (e: FormData, isImg : string | null) => {
         const _formData = e;
         if (!isImg) _formData.set('avatar', "");
         formAction(_formData);
-    }, [])
+    }
     
     useEffect(() => {
         onValidation(state)

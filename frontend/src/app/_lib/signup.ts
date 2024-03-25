@@ -4,7 +4,7 @@ import {redirect} from "next/navigation";
 import axios from "axios";
 import {signIn} from '@/auth'
 
-export default async (prevState: any, formData: FormData) => {
+const Signup =  async (prevState: any, formData: FormData) => {
     
     let shouldRedirect : boolean = false
 
@@ -70,3 +70,6 @@ export default async (prevState: any, formData: FormData) => {
     return {message: null};
     
 }
+
+
+export default Signup
