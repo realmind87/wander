@@ -3,11 +3,17 @@ interface UserID {
 }
 
 export interface User {
-    id: string,
+    userID: string,
     image: string,
-    Followers: UserID[],
-    _count: {
-        Followers: number,
-        Followings: number,
-    }
+    type: string,
 }
+
+// export interface User {
+//     userID: string,
+//     image: string,
+//     Followers: UserID[],
+//     _count: {
+//         Followers: number,
+//         Followings: number,
+//     }
+// }

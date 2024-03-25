@@ -1,12 +1,17 @@
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const port = 8080;
 
 const userRoutes = require('./routes/users');
+const postRoutes = require('./routes/posts');
 
 app.use(express.json()); // JSON 요청 본문을 파싱하기 위한 미들웨어
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 세션 설정
 app.use(session({
@@ -16,9 +21,16 @@ app.use(session({
     cookie: { secure: false } // HTTPS를 사용하는 경우 true로 설정
 }));
 
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+    })
+);
+
 // 라우트 마운트
 app.use('/users', userRoutes);
-
+app.use('/posts', postRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

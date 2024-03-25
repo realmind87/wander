@@ -1,21 +1,48 @@
 const express = require('express');
 const bcrypt = require('bcrypt'); // 비밀번호 hash 구현
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require("path");
 const router = express.Router();
 
 // 간단한 메모리 기반 사용자 저장소
 const users = [];
 
+// Multer 설정: 이미지 저장 위치와 파일명 정의
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/'); // 파일이 저장될 경로
+    },
+    filename: function(req, file, cb) {
+        // 파일명 설정: fieldname + timestamp + file extension
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+// 파일 필터링: 이미지 파일만 허용
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true);
+    } else if (!file.originalname) {
+        cb(null, false);
+    } else {
+        cb(new Error('Not an image! Please upload an image.'), false);
+    }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter })
+
+
 // 로그인 라우트
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { userID, password } = req.body;
+    const user = users.find(user => user.userID === userID);
 
-    // 사용자 찾기
-    const user = users.find(user => user.username === username);
     if (!user) {
-        return res.status(400).send('Cannot find user.');
+        console.log('Login error')
+        return res.status(500).json({user: null, code: 4000, message: '가입 되어 있지 않습니다.'});
     }
-
+    
     try {
         // 비밀번호 비교
         if (await bcrypt.compare(password, user.password)) {
@@ -26,7 +53,14 @@ router.post('/login', async (req, res) => {
             // JWT 생성
             const token = jwt.sign({ username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
 
-            res.json({ message: 'Success', token }); // 로그인 성공 응답
+            // 쿠키에 JWT 저장
+            res.cookie('token', token, {
+                httpOnly: true, // XSS 공격 방지
+                secure: true, // HTTPS를 사용할 때만 쿠키 전송
+                sameSite: 'strict' // CSRF 공격 방지
+            });
+            
+            res.json({user, message: 'Success', token}); // 로그인 성공 응답
         } else {
             res.send('Not Allowed'); // 비밀번호 불일치
         }
@@ -35,47 +69,49 @@ router.post('/login', async (req, res) => {
     }
 })
 
+
+// 로그인 라우트
+// router.post('/login', async (req, res) => {
+//     const { userID, password } = req.body;
+
+//     // 사용자 찾기
+//     const user = users.find(user => user.userID === userID);
+//     if (!user) {
+//         console.log('dddddd');
+//         return res.json({code: 4000, message: '가입 되어 있지 않습니다.'});
+//     }
+
+//     try {
+//         // 비밀번호 비교
+//         if (await bcrypt.compare(password, user.password)) {
+
+//             // 세션 생성
+//             req.session.user = { username: user.username };
+
+//             // JWT 생성
+//             const token = jwt.sign({ username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
+
+//             // 쿠키에 JWT 저장
+//             res.cookie('token', token, {
+//                 httpOnly: true, // XSS 공격 방지
+//                 secure: true, // HTTPS를 사용할 때만 쿠키 전송
+//                 sameSite: 'strict' // CSRF 공격 방지
+//             });
+            
+//             res.json({user, message: 'Success', token }); // 로그인 성공 응답
+//         } else {
+//             res.send('Not Allowed'); // 비밀번호 불일치
+//         }
+//     } catch {
+//         console.log('dsafsdfasdfasdfasdfasdfasdasdf')
+//         res.status(500).send();
+//     }
+// })
+
 // 회원가입
-router.post('/register' , async (req, res) => {
-    const { userID, password, passwordCheck } = req.body;
-
-    console.log(req.body)
-
-    // 유저네임 유효성 검사를 위한 정규 표현식: 영문자로 시작하고 최소 8자 이상
-    const usernameRegex = /^[A-Za-z][A-Za-z0-9]{7,}$/;
-
-    // 비밀번호 유효성 검사를 위한 정규 표현식
-    // 최소 8자, 최소 하나의 대문자와 특수문자 포함
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^])[A-Za-z\d@$!%*?&^]{8,}$/;
-
-
-    // 입력 검증 (실제로는 더 강화된 검증 필요)
-    if (!userID) {
-        return res.json({code: 400, error: "userID", message: '아이디를 입력해주세요'});
-    }
-
-    // 유저네임 유효성 검사
-    if (!usernameRegex.test(userID)) {
-        return res.send({code: 400, error: 'userID_validation', message: '아이디 양식에 맞지 않습니다.'});
-    }
-
-    if (!password) {
-        return res.json({code: 400, error: "password", message: '비밀번호 입력해주세요'});
-    }
-
-    // 비밀번호 유효성 검사
-    if (!passwordRegex.test(password)) {
-        return res.send({code: 400, error: 'password_validation', message: '비밀번호 양식에 맞지 않습니다.'});
-    }
-    
-    if (!passwordCheck) {
-        return res.json({code: 400, error: "passwordCheck", message: '비밀번호 확인을 입력해주세요'});
-    }
-
-    // 비밀번호 확인 유효성 검사
-    if (password !== passwordCheck) {
-        return res.send({code: 400, error: 'passwordCheck_validation', message: '비밀번호를 다시 확인해 주세요'});
-    }
+router.post('/register', upload.single('avatar'), async (req, res) => {
+    const { avatar, userID, password } = req.body;
+    const avatarPath = req.file ? req.file.path : '';
 
     // 중복 사용자
     const existingUser = users.find(user => user.userID === userID )
@@ -83,17 +119,17 @@ router.post('/register' , async (req, res) => {
         return res.send({code: 400, error: 'user_exist', message: '가입된 회원이 있습니다.'})
     }
 
-
     // 비밀번호 해싱
     try {
         const saltRounds = 10; // 비밀번호 해싱의 복잡도 설정
         const hashedPassword = await bcrypt.hash(password, saltRounds); // 비밀번호 해싱
-
+        
         // 사용자 저장
-        const newUser = { userID, password: hashedPassword };
+        const newUser = { userID, password: hashedPassword, avatar: avatarPath, type: 'uploads'};
+         
         users.push(newUser);
         res.status(201).send(`User ${userID} registered successfully`);
-
+        
     } catch {
         res.status(500).send('Server error.');
     }

@@ -48,8 +48,9 @@
         font-size: $font-size-sm;
         color: $color-danger;
     }
-
+    
     .info {
+        margin-top: 30px;
         text-align: center;
         font-size: $font-size-base;
 
@@ -159,21 +160,29 @@
 
             ul {
                 li {
+                    position: relative;
                     margin-bottom: 30px;
                 }
             }
 
             .txt-helper {
+                position: absolute;
+                left: 10px;
+                top: 60px;
                 padding-left: 20px;
                 margin-top: 10px;
                 color: #999;
                 font-size: $font-size-xs;
+
+                &.wran {
+                    color: $color-danger;
+                }
             }
         }
         
         .btn-area {
             width: 100%;
-            margin-top: auto;
+            margin-top: 160px;
     
             .btn-signup {
                 display: flex;

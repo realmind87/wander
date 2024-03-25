@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/main.scss";
-//import Providers from './providers'
+import RQproviders from './_component/query/RQproviders'
 import axios from "axios";
+import AuthSession from "./_component/auth/AuthSession";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -18,8 +19,9 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        {/* <Providers>{children}</Providers> */}
+        <AuthSession>
+          <RQproviders>{children}</RQproviders>
+        </AuthSession>
       </body>
     </html>
   );

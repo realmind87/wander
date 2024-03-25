@@ -1,7 +1,8 @@
-import { Post } from "./post"
+import { PostProps } from "./post"
 
 export interface PostImage {
     link: string,
     imageId: number,
-    Post?: Post
+    type: string,
+    Post?: PostProps
 }

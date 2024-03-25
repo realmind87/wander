@@ -5,14 +5,14 @@ interface UserID {
     userId: string,
 }
 
-export interface Post {
+export interface PostProps {
     postId: number;
     User: User;
+    title: string;
     content: string;
     createdAt: Date;
-    Images: PostImage[],
+    Images: PostImage[] | string,
     Hearts: UserID[],
-    Reposts: UserID[],
     Comments: UserID[],
     _count: {
         Hearts: number,

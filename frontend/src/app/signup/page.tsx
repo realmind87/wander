@@ -6,74 +6,29 @@ import { IoMdArrowBack } from "react-icons/io";
 import Image from 'next/image';
 import Link from 'next/link';
 import onSubmit from '../_lib/signup'
-import { useFormState, useFormStatus } from 'react-dom'
-
-// interface ImageUploadProps {
-//     onUpload?: (file: File) => void;
-// }
+import { useFormState } from 'react-dom'
 
 export default function SignUp() {
-    const { pending, data, method, action } = useFormStatus()
     const userRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const passwordCheckRef = useRef<HTMLInputElement>(null);
 
-    const [user, setUser] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [passwordCheck, setPasswordCheck] = useState<string>("");
-
-    const [userMsg, setUserMsg] = useState<string>("아이디를 입력해주세요");
-    const [passwordMsg, setPasswordMsg] = useState<string>("비밀번호를 입력해주세요");
-    const [passwordCheckMsg, setPasswordCheckMsg] = useState<string>("비밀번호를 다시 입력해주세요");
-
     const [state, formAction] = useFormState(onSubmit, { message: null });
-    const [preview, setPreview] = useState<string>('');
+    const {code, message} = state;
 
-    const userHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>, state : any) => {
-        
-        if (state.code === "userID" || state.code === "userID_validation") {
-            setUser("");
-            setUserMsg(state.message);
-        } else {
-            setUser(e.target.value)
-        }
-        
-    }, [state])
-
-    const passwordHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>, state : any) => {
-        setPassword(e.target.value)
-    }, [state])
-
-    const passwordCheckHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>, state : any) => {
-        setPasswordCheck(e.target.value)
-    }, [state])
+    const [preview, setPreview] = useState<string | null>('');
 
     const onValidation = useCallback((state: any) => {
-        console.log(state)
-
-        if (state.code === "userID") {
-            if (userRef.current){
-                userRef.current?.focus();
-                userRef.current.value = ""
-            }
-            setUserMsg(state.message);
-        }
-
-        if (state.code === "userID_validation") {
-            setUser("");
-            setUserMsg(state.message);
+        const { code } = state        
+        if (code === 4001 || code === 4002 || code === 4007) {
             userRef.current?.focus();
         }
 
-        if (state.code === "password" || state.code === "password_validation") {
-            setPassword("");
-            setPasswordMsg(state.message);
+        if (code === 4003 || code === 4004) {
             passwordRef.current?.focus();
         }
 
-        if (state.code === "passwordCheck" || state.code === "passwordCheck_validation") {
-            setPasswordCheck("");
-            setPasswordCheckMsg(state.message);
+        if (code === 4005|| code === 4006) {
             passwordCheckRef.current?.focus();
         }
 
@@ -85,21 +40,19 @@ export default function SignUp() {
             const file = files[0];
             setPreview(URL.createObjectURL(file));
         } else {
-            setPreview('');
+            setPreview(null);
         }
     };
 
-    const onSubmitHandler = useCallback((e: FormData) => {
-        formAction(e);
+    const onSubmitHandler = useCallback((e: FormData, isImg : string | null) => {
+        const _formData = e;
+        if (!isImg) _formData.set('avatar', "");
+        formAction(_formData);
     }, [])
     
     useEffect(() => {
         onValidation(state)
     }, [state])
-    
-    useEffect(() => {
-        console.log(pending, data, method, action)
-    }, [pending, data, method, action])
 
     return (
         <div id="wrap" className="signup">
@@ -108,7 +61,7 @@ export default function SignUp() {
             </Link>
             <div className="signup-warp">
                 <h1>회원가입</h1>
-                <form action={onSubmitHandler}>
+                <form action={(e) => onSubmitHandler(e, preview)}>
                     <div className="signup-content">
                         <ul>
                             <li>
@@ -120,7 +73,7 @@ export default function SignUp() {
                                             <CgProfile size={80} color='#ccc'/>
                                         )}
                                     </label>
-                                    <input id="avatar" type="file" name="image" accept="image/*" onChange={handleImageChange} />
+                                    <input id="avatar" type="file" name="avatar" accept="image/*" onChange={handleImageChange}/>
                                 </div>
                             </li>
                             <li>
@@ -128,43 +81,37 @@ export default function SignUp() {
                                     ref={userRef}
                                     type="text"
                                     name='userID'
-                                    value={user}
-                                    onChange={(e) => userHandler(e, state)}
-                                    className={`${state.error === "userID" || state.error === "userID_validation" ? "wran" : ""}`}
-                                    placeholder={userMsg}
+                                    className={`${code === 4001 || code === 4002 || code === 4007 ? "wran" : ""}`}
+                                    placeholder="영문, 숫자 포함 8자 이상 입력해주세요"
                                 />
-                                <p className="txt-helper">{userMsg}</p>
-                                <p className="txt-helper">영문, 숫자 포함 8자 이상 입력해주세요</p>
+                                {(code === 4001 || code === 4002 || code === 4007 ) && <p className="txt-helper wran">{message}</p>}
+                                
                             </li>
                             <li>
                                 <input
                                     ref={passwordRef}
                                     type="password"
                                     name="password"
-                                    value={password}
-                                    onChange={(e) => passwordHandler(e, state)}
-                                    className={`${state.error === "password" || state.error === "password_validation" ? "wran" : ""}`}
-                                    placeholder={passwordMsg}
+                                    className={`${code === 4003 || code === 4004 ? "wran" : ""}`}
+                                    placeholder="영문 대문자, 숫자, 특수문자 포함 8자 이상 입력해주세요"
                                 />
-                                <p className="txt-helper">영문 대문자, 숫자, 특수문자 포함 8자 이상 입력해주세요</p>
+                                {(code === 4003 || code === 4004) && <p className="txt-helper wran">{message}</p>}
                             </li>
                             <li>
                                 <input
                                     ref={passwordCheckRef}
                                     type="password"
                                     name="passwordCheck"
-                                    value={passwordCheck}
-                                    onChange={(e) => passwordCheckHandler(e, state)}
-                                    className={`${state.error === "passwordCheck" || state.error === "passwordCheck_validation" ? "wran" : ""}`}
-                                    placeholder={passwordCheckMsg} 
+                                    className={`${code === 4005 || code === 4006 ? "wran" : ""}`}
+                                    placeholder="비밀번호 다시 입력해주세요" 
                                 />
-                                <p className="txt-helper">영문 대문자, 숫자, 특수문자 포함 8자 이상 입력해주세요</p>
+                                {(code === 4005 || code === 4006) && <p className="txt-helper wran">{message}</p>}
                             </li>
                         </ul>
                     </div>
                     
                     <div className="btn-area">
-                        <button type="submit" className="btn-signup" disabled={pending}>회원가입</button>
+                        <button type="submit" className="btn-signup">회원가입</button>
                     </div>
                 </form>
             </div>
