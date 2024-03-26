@@ -69,45 +69,6 @@ router.post('/login', async (req, res) => {
     }
 })
 
-
-// 로그인 라우트
-// router.post('/login', async (req, res) => {
-//     const { userID, password } = req.body;
-
-//     // 사용자 찾기
-//     const user = users.find(user => user.userID === userID);
-//     if (!user) {
-//         console.log('dddddd');
-//         return res.json({code: 4000, message: '가입 되어 있지 않습니다.'});
-//     }
-
-//     try {
-//         // 비밀번호 비교
-//         if (await bcrypt.compare(password, user.password)) {
-
-//             // 세션 생성
-//             req.session.user = { username: user.username };
-
-//             // JWT 생성
-//             const token = jwt.sign({ username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
-
-//             // 쿠키에 JWT 저장
-//             res.cookie('token', token, {
-//                 httpOnly: true, // XSS 공격 방지
-//                 secure: true, // HTTPS를 사용할 때만 쿠키 전송
-//                 sameSite: 'strict' // CSRF 공격 방지
-//             });
-            
-//             res.json({user, message: 'Success', token }); // 로그인 성공 응답
-//         } else {
-//             res.send('Not Allowed'); // 비밀번호 불일치
-//         }
-//     } catch {
-//         console.log('dsafsdfasdfasdfasdfasdfasdasdf')
-//         res.status(500).send();
-//     }
-// })
-
 // 회원가입
 router.post('/register', upload.single('avatar'), async (req, res) => {
     const { avatar, userID, password } = req.body;
