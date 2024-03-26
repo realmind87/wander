@@ -1,7 +1,11 @@
+const serverless = require('serverless-http');
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 const port = 8080;
@@ -21,12 +25,23 @@ app.use(session({
     cookie: { secure: false } // HTTPS를 사용하는 경우 true로 설정
 }));
 
-app.use(
-    cors({
-        origin: true,
+// development
+if (process.env.NODE_ENV === 'development'){
+    console.log('development')
+    app.use(
+      cors({
+        origin: ["http://localhost:3000"],
         credentials: true,
-    })
-);
+      })
+    );
+  } else {
+    app.use(
+      cors({
+        origin: ["https://wander-ehv.pages.dev"],
+        credentials: true,
+      })
+    );
+  }
 
 // 라우트 마운트
 app.use('/users', userRoutes);
@@ -36,6 +51,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-});
+module.exports.handler = serverless(app)
+
+// app.listen(port, () => {
+//     console.log(`Example app listening at http://localhost:${port}`);
+// });
