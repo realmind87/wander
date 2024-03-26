@@ -1,3 +1,7 @@
+export const config = {
+  runtime: 'edge',
+};
+
 import Header from "../_component/common/Header";
 import Aside from "../_component/common/Aside"
 import Search from '..//_component/form/search/Search';

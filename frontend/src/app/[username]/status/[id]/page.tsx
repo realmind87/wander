@@ -1,3 +1,7 @@
+export const config = {
+    runtime: 'edge',
+};
+
 import { IoArrowBackSharp } from "react-icons/io5";
 import LoginButton from '@/app/_component/form/LoginButton';
 import UserInfo from '@/app/_component/form/UserInfo';
@@ -8,6 +12,8 @@ import { getAsidePosts } from '@/app/_lib/posts'
 import Aside from "./_component/Aside";
 import Content from "./_component/Content";
 import BackButton from "./_component/BackButton";
+
+
 
 type Props = {
     params: { id: string, username: string }

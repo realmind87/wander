@@ -1,5 +1,9 @@
 "use client"
 
+export const config = {
+    runtime: 'edge',
+};
+
 import { CiSearch } from "react-icons/ci";
 import {useRouter} from "next/navigation";
 import { FormEventHandler } from "react";
