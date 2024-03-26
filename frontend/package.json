@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
-    "start": "cross-env ANALYZE=true NODE_ENV=developpaper next start -p 80",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "vercel-build": "npm run prepare && next build"
   },

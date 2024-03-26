@@ -21,8 +21,6 @@ const Content = ({params}: Props) => {
         gcTime: 300 * 1000,
     })
     
-    console.log(data)
-    
     return (
         <section className="content">
             <article className="detail">

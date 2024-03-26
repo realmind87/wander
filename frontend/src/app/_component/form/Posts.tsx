@@ -40,8 +40,6 @@ const Post = () => {
             !isFetching && hasNextPage && fetchNextPage();
         }
     }, [isFetching, hasNextPage, inView, fetchNextPage])
-
-    console.log(data)
     
     return (
         <div className="post">
