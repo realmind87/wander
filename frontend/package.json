@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cross-env ANALYZE=true NODE_ENV=developpaper next build",
+    "build": "next build && next export",
     "start": "cross-env ANALYZE=true NODE_ENV=developpaper next start -p 80",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "npm run prepare && next build"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.28.4",
